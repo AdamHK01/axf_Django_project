@@ -1,0 +1,94 @@
+{% extends 'axf/base.html' %}
+{% load static from staticfiles %}
+
+
+{% block linkscript  %}
+		<link rel="stylesheet" type="text/css" href="{% static 'market/css/market.css' %}"/>
+		<script type="text/javascript" src="{% static "market/js/market.js" %}"></script>
+{% endblock linkscript  %}
+
+
+{% block base %}
+
+<div id="market">
+	<aside>
+		<menu>
+			<ul>
+				{% for item in leftSlider %}
+				<li>
+					<span class="yellowSlide"></span>
+					<a href="/market/{{item.typeid}}/0/0/">{{item.typename}}</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</menu>
+	</aside>
+
+	<section>
+	<nav>
+		<ul>
+		    <li><span id="alltypebtn">全部类型<span class="glyphicon glyphicon-chevron-down"></span>
+		    </span></li>
+		    <li><span id="showsortbtn">综合排序<span class="glyphicon glyphicon-chevron-down"></span></span></li>
+		</ul>
+	</nav>
+        <menu>
+            <ul>
+                {% csrf_token %}
+                {% for gds in productList %}
+                <!--商品信息展示-->
+                    <li>
+                        <a href="#">
+                            <img src="{{ gds.productimg }}" alt="">
+                            <div class="shoppingInfo">
+                                <h6></h6>
+                                <p class="detailTag">
+                                    <span>精选</span>
+                                    <span></span>
+                                </p>
+                                <p class="unit">
+                                    {{ gds.productlongname }}
+                                </p>
+                                <p class="price">
+                                    <span>¥{{ gds.price }}</span>
+                                    <s>¥{{ gds.marketprice }}</s>
+                                </p>
+                            </div>
+                        </a>
+                    <section>
+                        <button ga="{{gds.productid}}" class="subShopping">-</button>
+                        
+                                <span id="{{gds.productid}}">{{ gds.num|default:0 }}</span>
+
+                        <button ga="{{gds.productid}}" class="addShopping">+</button>
+                    </section>
+                    </li>
+                {% endfor %}
+                <!--处理数据结束-->
+            </ul>
+
+			<div id="typediv">
+				<!-- 类型div -->
+				<div>
+					{% for item in childList %}
+					<a href="/market/{{categoryid_id}}/{{item.childId}}/0/"><span>{{item.childName}}</span></a>
+					{% endfor %}
+				</div>
+			</div>
+
+	        <div id="sortdiv">
+	        	<!-- 排序div -->
+	            <div>
+					<a href="/market/{{categoryid_id}}/{{cid}}/0/" class="sorta"><span>综合排序</span></a>
+					<a href="/market/{{categoryid_id}}/{{cid}}/1/" class="sorta"><span>销量排序</span></a>
+					<a href="/market/{{categoryid_id}}/{{cid}}/2/" class="sorta"><span>价格最低</span></a>
+					<a href="/market/{{categoryid_id}}/{{cid}}/3/" class="sorta"><span>价格最高</span></a>				
+	            </div>
+	        </div>
+        </menu>
+
+
+	</section>
+</div>
+			
+{% endblock base %}
